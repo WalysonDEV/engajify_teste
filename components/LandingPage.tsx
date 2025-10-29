@@ -30,6 +30,8 @@ const LandingPage: React.FC = () => {
 
     const [phraseIndex, setPhraseIndex] = useState(0);
     const [animationState, setAnimationState] = useState('in');
+    const [isMobile, setIsMobile] = useState(false);
+    const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
     // --- Hacker Text Effect State and Logic ---
     const originalTitle = "Engajify";
@@ -129,16 +131,65 @@ const LandingPage: React.FC = () => {
         };
     }, [stopHackerEffect, handleInteractionEnd]);
 
+    // Detect mobile and reduced motion preferences on client only
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const mq = window.matchMedia('(max-width: 767px)');
+        const motionMq = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        const update = () => setIsMobile(mq.matches || navigator.userAgent.match(/Mobi|Android/i) !== null);
+        const updateMotion = () => setPrefersReducedMotion(motionMq.matches);
+
+        update();
+        updateMotion();
+
+        mq.addEventListener?.('change', update);
+        motionMq.addEventListener?.('change', updateMotion);
+        window.addEventListener('resize', update);
+
+        return () => {
+            mq.removeEventListener?.('change', update);
+            motionMq.removeEventListener?.('change', updateMotion);
+            window.removeEventListener('resize', update);
+        };
+    }, []);
+
     const animationClass = animationState === 'in' ? 'rotating-text-in' : 'rotating-text-out';
 
+    // On mobile or when user prefers reduced motion, render a lightweight static background to avoid freezes.
+    if (isMobile || prefersReducedMotion) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center text-center p-4 relative overflow-hidden bg-black">
+                <div className="relative z-10 flex flex-col items-center">
+                    <h1
+                        className="futuristic-title interactive-glow-target"
+                        onMouseDown={handleInteractionStart}
+                        onTouchStart={handleInteractionStart}
+                        style={{ cursor: 'pointer', userSelect: 'none' }}
+                    >
+                        {titleText}
+                    </h1>
+                    <div className="mt-4 text-lg max-w-2xl mx-auto text-[var(--text-secondary)] h-[56px] flex items-center justify-center overflow-hidden">
+                        <span className={animationClass}>
+                            {phrases[phraseIndex]}
+                        </span>
+                    </div>
+                    <div className="mt-10 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+                        <Auth />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <LiquidGlassBackground 
+        <LiquidGlassBackground
             className="min-h-screen flex flex-col items-center justify-center text-center p-4 relative overflow-hidden bg-black"
         >
             <BubblesBackground />
 
             <div className="relative z-10 flex flex-col items-center">
-                <h1 
+                <h1
                     className="futuristic-title interactive-glow-target"
                     onMouseDown={handleInteractionStart}
                     onTouchStart={handleInteractionStart}
@@ -151,7 +202,7 @@ const LandingPage: React.FC = () => {
                         {phrases[phraseIndex]}
                     </span>
                 </div>
-                <div className="mt-10 animate-fade-in" style={{animationDelay: '0.6s'}}>
+                <div className="mt-10 animate-fade-in" style={{ animationDelay: '0.6s' }}>
                     <Auth />
                 </div>
             </div>
