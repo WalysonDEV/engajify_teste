@@ -32,9 +32,33 @@ export default async function handler(req, res) {
 
     const response = await ai.models.generateContent({ model, contents, config });
 
+    // Normalize response to include a `text` field for backward compatibility with the frontend.
+    // Different SDK versions may return text in different places; try common locations.
+    let normalizedText = null;
+    try {
+      if (response && typeof response.text === 'string') {
+        normalizedText = response.text;
+      } else if (response && response.output && Array.isArray(response.output) && response.output[0]) {
+        // e.g. response.output[0].content[0].text
+        const out0 = response.output[0];
+        if (out0.content && Array.isArray(out0.content) && out0.content[0] && typeof out0.content[0].text === 'string') {
+          normalizedText = out0.content[0].text;
+        }
+      } else if (response && response.candidates && Array.isArray(response.candidates) && response.candidates[0]) {
+        const cand = response.candidates[0];
+        if (cand.content && Array.isArray(cand.content) && cand.content[0] && typeof cand.content[0].text === 'string') {
+          normalizedText = cand.content[0].text;
+        }
+      }
+    } catch (e) {
+      console.error('Error normalizing Gemini response:', e);
+    }
+
+    const safeResponse = Object.assign({}, response, { text: normalizedText });
+
     // Return structured JSON to the frontend.
     res.statusCode = 200;
-    res.end(JSON.stringify({ ok: true, response }));
+    res.end(JSON.stringify({ ok: true, response: safeResponse }));
     return;
   } catch (error) {
     // Make sure we always return valid JSON on errors and log full details server-side.
