@@ -125,6 +125,15 @@ export const generateContentStrategy = async (
 
     if (!resp.ok || !jsonBody || !jsonBody.ok) {
       console.error('Server /api/gemini error:', jsonBody || text);
+      
+      // Trata erros de fila especificamente
+      if (jsonBody?.queueInfo) {
+        const queueError = new Error(jsonBody.error || 'Você está na fila de espera.');
+        (queueError as any).queuePosition = jsonBody.queuePosition;
+        (queueError as any).isQueueError = true;
+        throw queueError;
+      }
+      
       throw new Error('Failed to generate content from serverless Gemini endpoint. ' + (jsonBody?.error || ''));
     }
 
