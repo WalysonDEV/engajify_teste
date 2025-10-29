@@ -1,0 +1,5 @@
+{
+  "name": "Engajify",
+  "description": "An AI-powered application to boost social media engagement. It analyzes images and user-provided themes to generate complete, personalized posting strategies, helping creators post the right content at the right time.",
+  "requestFramePermissions": []
+}
