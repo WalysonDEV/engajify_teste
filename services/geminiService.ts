@@ -16,7 +16,8 @@ export const generateContentStrategy = async (
 ): Promise<EngajifyResult> => {
   // Instead of calling the Gemini client directly from the browser (which would expose the key),
   // we POST the request to our serverless route `/api/gemini` which holds the GEMINI_API_KEY.
-  const model = 'gemini-1.5-flash';
+  // Use gemini-2.5-flash as a safer default since some API keys may not have access to newer models.
+  const model = 'gemini-2.5-flash';
 
   const textParts: { text: string }[] = [
     { text: `Você é 'Engajify', um especialista em marketing de mídias sociais e criador de conteúdo. Sua missão é analisar o contexto fornecido (imagem ou tema) e as preferências do usuário para criar uma estratégia de postagem completa e otimizada para máximo engajamento.`},
