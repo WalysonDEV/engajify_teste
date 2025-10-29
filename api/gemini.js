@@ -1,39 +1,47 @@
-// Serverless proxy for Gemini calls.
-// This file should live at /api/gemini.js and is intended for platforms like Vercel.
-// It reads GEMINI_API_KEY from process.env and never exposes it to the client.
+// Serverless proxy for Gemini calls (ESM-compatible).
+// Lives at /api/gemini and reads GEMINI_API_KEY from process.env on the server.
 
-module.exports = async function (req, res) {
+export default async function handler(req, res) {
+  // Ensure responses are JSON
+  res.setHeader('Content-Type', 'application/json');
+
   if (req.method !== 'POST') {
     res.statusCode = 405;
     res.setHeader('Allow', 'POST');
-    return res.json({ error: 'Method not allowed' });
+    res.end(JSON.stringify({ error: 'Method not allowed' }));
+    return;
   }
 
   try {
     const body = req.body || {};
     const model = body.model || 'gemini-1.5-flash';
-    const contents = body.contents || body.contents || { parts: body.promptParts || [] };
+    const contents = body.contents || { parts: body.promptParts || [] };
     const config = body.config || {};
 
-    // Dynamically import the official GenAI client so this file can be used in Node serverless envs.
+    // Dynamically import the official GenAI client.
     const { GoogleGenAI } = await import('@google/genai');
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       res.statusCode = 500;
-      return res.json({ error: 'GEMINI_API_KEY not configured in environment' });
+      res.end(JSON.stringify({ error: 'GEMINI_API_KEY not configured in environment' }));
+      return;
     }
 
     const ai = new GoogleGenAI({ apiKey });
 
     const response = await ai.models.generateContent({ model, contents, config });
 
-    // Forward the AI response directly. The frontend expects response.text with the generated JSON string.
+    // Return structured JSON to the frontend.
     res.statusCode = 200;
-    return res.json({ ok: true, response });
+    res.end(JSON.stringify({ ok: true, response }));
+    return;
   } catch (error) {
+    // Make sure we always return valid JSON on errors and log full details server-side.
     console.error('Error in /api/gemini:', error);
+    const message = error && error.message ? error.message : String(error);
     res.statusCode = 500;
-    return res.json({ ok: false, error: String(error) });
+    res.end(JSON.stringify({ ok: false, error: message }));
+    return;
   }
-};
+}

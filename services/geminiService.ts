@@ -112,13 +112,22 @@ export const generateContentStrategy = async (
       body: JSON.stringify(payload)
     });
 
-    const json = await resp.json();
-    if (!resp.ok || !json || !json.ok) {
-      console.error('Server /api/gemini error:', json);
-      throw new Error('Failed to generate content from serverless Gemini endpoint.');
+    // Read as text first so we can provide better debugging info if the server returns HTML or plain text.
+    const text = await resp.text();
+    let jsonBody: any = null;
+    try {
+      jsonBody = text ? JSON.parse(text) : null;
+    } catch (parseErr) {
+      console.error('Non-JSON response from /api/gemini:', text);
+      throw new Error('Server error: ' + (text ? text.slice(0, 500) : 'empty response'));
     }
 
-    const response = json.response;
+    if (!resp.ok || !jsonBody || !jsonBody.ok) {
+      console.error('Server /api/gemini error:', jsonBody || text);
+      throw new Error('Failed to generate content from serverless Gemini endpoint. ' + (jsonBody?.error || ''));
+    }
+
+    const response = jsonBody.response;
     if (!response || !response.text) {
       throw new Error('Resposta inválida da API do Gemini para estratégia: Texto não encontrado.');
     }
