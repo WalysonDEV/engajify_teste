@@ -243,15 +243,11 @@ const Dashboard: React.FC = () => {
               ) : results ? (
                 <ResultsDisplay results={results} />
               ) : (
-                <div className="flex-grow flex flex-col items-center justify-center text-center text-gray-500">
-                  <div className="w-20 h-20 wave-emitter idle relative inset-surface rounded-full flex items-center justify-center">
-                    <div className="wave"></div>
-                    <div className="wave"></div>
-                    <div className="wave"></div>
-                    <StrategyIcon className="w-10 h-10 text-gray-500 z-10" />
-                  </div>
-                  <p className="mt-6 font-semibold text-[var(--text-secondary)]">Sua estratégia aparecerá aqui.</p>
-                  <p className="text-sm text-gray-500">{session ? 'Envie uma imagem ou escolha um tema para começar.' : 'Faça login para começar a gerar.'}</p>
+                <div className="flex-grow flex flex-col items-center justify-center text-center py-8">
+                  <TechLoader isLowPerformance={isLowPerformance} variant="idle" />
+                  {!session && (
+                    <p className="text-sm text-gray-500 mt-4">Faça login para começar a gerar.</p>
+                  )}
                 </div>
               )}
           </LiquidGlassBackground>

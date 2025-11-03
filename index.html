@@ -461,6 +461,53 @@
           opacity: 1;
         }
       }
+
+      .tech-idle-text {
+        animation: tech-idle-fade 3s ease-in-out infinite;
+      }
+
+      @keyframes tech-idle-fade {
+        0%, 100% { 
+          opacity: 0.7; 
+          transform: translateY(0);
+        }
+        50% { 
+          opacity: 1; 
+          transform: translateY(-2px);
+        }
+      }
+
+      .tech-idle-subtext {
+        animation: tech-idle-fade 3s ease-in-out infinite;
+        animation-delay: 0.5s;
+      }
+
+      /* Estilos para versão idle (estado inicial) */
+      .tech-ring-idle {
+        border-color: rgba(160, 160, 160, 0.2) !important;
+        opacity: 0.6;
+      }
+
+      .tech-particle-idle {
+        background: rgba(160, 160, 160, 0.4) !important;
+        box-shadow: 0 0 4px rgba(160, 160, 160, 0.5);
+        opacity: 0.5;
+      }
+
+      .tech-dot-idle {
+        background: rgba(160, 160, 160, 0.5) !important;
+        box-shadow: 0 0 6px rgba(160, 160, 160, 0.6);
+        opacity: 0.6;
+      }
+
+      .tech-icon-glow-idle {
+        background: radial-gradient(circle, rgba(160, 160, 160, 0.15) 0%, transparent 70%);
+        opacity: 0.4;
+      }
+
+      .tech-loader-idle {
+        filter: brightness(0.8);
+      }
       .animate-fade-in-out-text { animation: fade-in-out-text 2.5s infinite ease-in-out; }
       
       .icon-button {
