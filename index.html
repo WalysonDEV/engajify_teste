@@ -129,6 +129,188 @@
         50% { opacity: 1; }
         100% { opacity: 0.5; }
       }
+
+      /* Tech Loader Animations */
+      .tech-loader-container {
+        position: relative;
+      }
+
+      .tech-grid {
+        background-image: 
+          linear-gradient(rgba(var(--accent-primary-rgb), 0.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(var(--accent-primary-rgb), 0.1) 1px, transparent 1px);
+        background-size: 20px 20px;
+        animation: tech-grid-move 20s linear infinite;
+      }
+
+      @keyframes tech-grid-move {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(20px, 20px); }
+      }
+
+      .tech-ring {
+        position: absolute;
+        border: 2px solid rgba(var(--accent-primary-rgb), 0.3);
+        border-radius: 50%;
+        animation: tech-ring-rotate 8s linear infinite;
+      }
+
+      .tech-ring.ring-1 {
+        width: 120px;
+        height: 120px;
+        animation-duration: 8s;
+      }
+
+      .tech-ring.ring-2 {
+        width: 180px;
+        height: 180px;
+        animation-duration: 12s;
+        animation-direction: reverse;
+      }
+
+      .tech-ring.ring-3 {
+        width: 240px;
+        height: 240px;
+        animation-duration: 16s;
+      }
+
+      @keyframes tech-ring-rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      .tech-icon-pulse {
+        animation: tech-icon-pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes tech-icon-pulse {
+        0%, 100% { 
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% { 
+          transform: scale(1.1);
+          opacity: 0.8;
+        }
+      }
+
+      .tech-orbiting-dot {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: var(--accent-primary);
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(var(--accent-primary-rgb), 0.8);
+      }
+
+      .tech-orbiting-dot {
+        top: 50%;
+        left: 50%;
+      }
+
+      .tech-orbiting-dot.dot-1 {
+        animation: tech-orbit-circle 4s linear infinite;
+      }
+
+      .tech-orbiting-dot.dot-2 {
+        animation: tech-orbit-circle 4s linear infinite;
+        animation-delay: -1s;
+      }
+
+      .tech-orbiting-dot.dot-3 {
+        animation: tech-orbit-circle 4s linear infinite;
+        animation-delay: -2s;
+      }
+
+      .tech-orbiting-dot.dot-4 {
+        animation: tech-orbit-circle 4s linear infinite;
+        animation-delay: -3s;
+      }
+
+      @keyframes tech-orbit-circle {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg) translateX(100px) rotate(0deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) rotate(360deg) translateX(100px) rotate(-360deg);
+        }
+      }
+
+      .tech-text-line {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .tech-typing {
+        display: inline-block;
+        animation: tech-typing 3s steps(30, end) infinite;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 0;
+      }
+
+      @keyframes tech-typing {
+        0% { width: 0; }
+        50% { width: 100%; }
+        100% { width: 0; }
+      }
+
+      .tech-cursor {
+        display: inline-block;
+        animation: tech-cursor-blink 1s step-end infinite;
+        color: var(--accent-primary);
+      }
+
+      @keyframes tech-cursor-blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+      }
+
+      .tech-processing {
+        animation: tech-processing-fade 2s ease-in-out infinite;
+      }
+
+      @keyframes tech-processing-fade {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 1; }
+      }
+
+      .tech-dots {
+        display: flex;
+        gap: 4px;
+      }
+
+      .tech-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--accent-primary);
+        border-radius: 50%;
+        animation: tech-dot-bounce 1.4s ease-in-out infinite;
+      }
+
+      .tech-dot:nth-child(1) {
+        animation-delay: 0s;
+      }
+
+      .tech-dot:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .tech-dot:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes tech-dot-bounce {
+        0%, 80%, 100% { 
+          transform: scale(0.8);
+          opacity: 0.5;
+        }
+        40% { 
+          transform: scale(1.2);
+          opacity: 1;
+        }
+      }
       .animate-fade-in-out-text { animation: fade-in-out-text 2.5s infinite ease-in-out; }
       
       .icon-button {

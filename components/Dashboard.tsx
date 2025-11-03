@@ -6,6 +6,7 @@ import ImageUploader from './ImageUploader';
 import AdvancedOptions from './AdvancedOptions';
 import ResultsDisplay from './ResultsDisplay';
 import Loader from './Loader';
+import TechLoader from './TechLoader';
 import { StrategyIcon, XIcon, RefreshIcon } from './Icons'; // Import RefreshIcon
 import ThemeSelector from './ThemeSelector';
 import Modal from './Modal';
@@ -14,9 +15,11 @@ import { useAuth } from '../contexts/AuthContext';
 import Auth from './Auth';
 import SoftLightBackground from './SoftLightBackground';
 import LiquidGlassBackground from './LiquidGlassBackground';
+import { useLowPerformanceDevice } from '../hooks/useLowPerformanceDevice';
 
 const Dashboard: React.FC = () => {
   const { session } = useAuth();
+  const { isLowPerformance } = useLowPerformanceDevice();
   const [image, setImage] = useState<File | null>(null);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [imageMimeType, setImageMimeType] = useState<string | null>(null);
@@ -234,17 +237,8 @@ const Dashboard: React.FC = () => {
           <LiquidGlassBackground className="p-6 rounded-[12px] min-h-[500px] flex flex-col surface-card">
               <h2 className="text-2xl font-bold mb-4 text-[var(--text-primary)]">Sua Estratégia de Conteúdo</h2>
               {isLoading ? (
-                <div className="flex-grow flex flex-col items-center justify-center text-center">
-                  <div className="w-24 h-24 wave-emitter">
-                    <div className="wave"></div>
-                    <div className="wave"></div>
-                    <div className="wave"></div>
-                    <div className="w-16 h-16 rounded-full flex items-center justify-center bg-[var(--accent-primary)] bg-opacity-10">
-                      <StrategyIcon className="w-8 h-8 text-blue-300" />
-                    </div>
-                  </div>
-                  <p className="text-[var(--text-secondary)] mt-6 font-medium animate-fade-in-out-text">Gerando sua estratégia...</p>
-                  <p className="text-sm text-gray-500 mt-1 animate-fade-in-out-text" style={{animationDelay: '0.5s'}}>Isso pode levar alguns segundos.</p>
+                <div className="flex-grow flex flex-col items-center justify-center text-center py-8">
+                  <TechLoader isLowPerformance={isLowPerformance} />
                 </div>
               ) : results ? (
                 <ResultsDisplay results={results} />

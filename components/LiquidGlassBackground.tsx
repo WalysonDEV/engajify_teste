@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useLowPerformanceDevice } from '../hooks/useLowPerformanceDevice';
 
 interface LiquidGlassBackgroundProps {
   children: React.ReactNode;
@@ -6,12 +7,16 @@ interface LiquidGlassBackgroundProps {
 }
 
 const LiquidGlassBackground: React.FC<LiquidGlassBackgroundProps> = ({ children, className }) => {
+  const { isLowPerformance } = useLowPerformanceDevice();
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [isInteracting, setIsInteracting] = useState(false); // New state
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Não processa animações em dispositivos fracos
+    if (isLowPerformance) return;
+    
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
       setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
@@ -25,7 +30,7 @@ const LiquidGlassBackground: React.FC<LiquidGlassBackgroundProps> = ({ children,
   };
 
   const handleMouseEnter = () => {
-    setIsHovering(true);
+    if (!isLowPerformance) setIsHovering(true);
   };
 
   const handleMouseLeave = () => {
@@ -42,14 +47,16 @@ const LiquidGlassBackground: React.FC<LiquidGlassBackgroundProps> = ({ children,
       className={className}
     >
       {children}
-      <div
-        className={`liquid-glow ${isInteracting ? 'interacting' : ''}`}
-        style={{
-          left: `${mousePos.x}px`,
-          top: `${mousePos.y}px`,
-          opacity: isHovering ? 1 : 0,
-        }}
-      />
+      {!isLowPerformance && (
+        <div
+          className={`liquid-glow ${isInteracting ? 'interacting' : ''}`}
+          style={{
+            left: `${mousePos.x}px`,
+            top: `${mousePos.y}px`,
+            opacity: isHovering ? 1 : 0,
+          }}
+        />
+      )}
     </div>
   );
 };
