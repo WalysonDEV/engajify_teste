@@ -14,9 +14,6 @@ const LiquidGlassBackground: React.FC<LiquidGlassBackgroundProps> = ({ children,
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Não processa animações em dispositivos fracos
-    if (isLowPerformance) return;
-    
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
       setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
@@ -30,7 +27,7 @@ const LiquidGlassBackground: React.FC<LiquidGlassBackgroundProps> = ({ children,
   };
 
   const handleMouseEnter = () => {
-    if (!isLowPerformance) setIsHovering(true);
+    setIsHovering(true);
   };
 
   const handleMouseLeave = () => {
@@ -47,16 +44,16 @@ const LiquidGlassBackground: React.FC<LiquidGlassBackgroundProps> = ({ children,
       className={className}
     >
       {children}
-      {!isLowPerformance && (
-        <div
-          className={`liquid-glow ${isInteracting ? 'interacting' : ''}`}
-          style={{
-            left: `${mousePos.x}px`,
-            top: `${mousePos.y}px`,
-            opacity: isHovering ? 1 : 0,
-          }}
-        />
-      )}
+      <div
+        className={`liquid-glow ${isInteracting ? 'interacting' : ''}`}
+        style={{
+          left: `${mousePos.x}px`,
+          top: `${mousePos.y}px`,
+          opacity: isHovering ? 1 : 0,
+          // Desabilita transições suaves apenas em dispositivos muito fracos para melhor performance
+          transition: isLowPerformance ? 'none' : 'opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        }}
+      />
     </div>
   );
 };
