@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import type { EngajifyResult, AdvancedOptions as AdvancedOptionsType } from '../types';
 import { generateContentStrategy } from '../services/geminiService';
 import Header from './Header';
@@ -19,7 +19,22 @@ import { useLowPerformanceDevice } from '../hooks/useLowPerformanceDevice';
 
 const Dashboard: React.FC = () => {
   const { session } = useAuth();
+  // Detecta se é mobile para aplicar detecção de dispositivo fraco apenas em mobile
+  const [isMobile, setIsMobile] = useState(false);
   const { isLowPerformance } = useLowPerformanceDevice();
+  const shouldUseLowPerformance = isMobile && isLowPerformance;
+
+  // Detecta mobile
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const checkMobile = () => {
+      const mq = window.matchMedia('(max-width: 767px)');
+      setIsMobile(mq.matches || /Mobi|Android/i.test(navigator.userAgent));
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   const [image, setImage] = useState<File | null>(null);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [imageMimeType, setImageMimeType] = useState<string | null>(null);
@@ -238,13 +253,13 @@ const Dashboard: React.FC = () => {
               <h2 className="text-2xl font-bold mb-4 text-[var(--text-primary)]">Sua Estratégia de Conteúdo</h2>
               {isLoading ? (
                 <div className="flex-grow flex flex-col items-center justify-center text-center py-8">
-                  <TechLoader isLowPerformance={isLowPerformance} />
+                  <TechLoader isLowPerformance={shouldUseLowPerformance} />
                 </div>
               ) : results ? (
                 <ResultsDisplay results={results} />
               ) : (
                 <div className="flex-grow flex flex-col items-center justify-center text-center py-8">
-                  <TechLoader isLowPerformance={isLowPerformance} variant="idle" />
+                  <TechLoader isLowPerformance={shouldUseLowPerformance} variant="idle" />
                   {!session && (
                     <p className="text-sm text-gray-500 mt-4">Faça login para começar a gerar.</p>
                   )}

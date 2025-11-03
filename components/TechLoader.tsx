@@ -33,89 +33,104 @@ const TechLoader: React.FC<TechLoaderProps> = ({ isLowPerformance = false, varia
 
   const isIdle = variant === 'idle';
   
+  // Versão idle: apenas círculos estáticos e ícone, sem cores e sem animações
+  if (isIdle) {
+    return (
+      <div className="flex flex-col items-center justify-center w-full">
+        <div className="relative w-80 h-80 mb-8 tech-loader-container">
+          {/* Círculos concêntricos estáticos (sem animação, sem cores) */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="tech-ring-static ring-1"></div>
+            <div className="tech-ring-static ring-2"></div>
+            <div className="tech-ring-static ring-3"></div>
+            <div className="tech-ring-static ring-4"></div>
+          </div>
+          
+          {/* Ícone central estático */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="tech-icon-static">
+              <StrategyIcon className="w-20 h-20 text-gray-400 strategy-icon-idle" />
+            </div>
+          </div>
+        </div>
+
+        {/* Texto idle */}
+        <div className="text-center">
+          <p className="mt-6 font-semibold text-[var(--text-secondary)] text-lg">
+            Sua estratégia aparecerá aqui.
+          </p>
+          <p className="text-sm text-gray-500 mt-2">
+            Envie uma imagem ou escolha um tema para começar.
+          </p>
+        </div>
+      </div>
+    );
+  }
+  
   return (
     <div className="flex flex-col items-center justify-center w-full">
-      {/* Container principal com efeito tecnológico */}
-      <div className={`relative w-80 h-80 mb-8 tech-loader-container ${isIdle ? 'tech-loader-idle' : ''}`}>
-        {/* Grid tecnológico de fundo animado */}
-        <div className={`absolute inset-0 tech-grid ${isIdle ? 'opacity-15' : 'opacity-30'}`}></div>
-        
-        {/* Linhas de conexão animadas */}
-        <div className={`absolute inset-0 tech-connection-lines ${isIdle ? 'opacity-20' : ''}`}></div>
-        
+      {/* Container principal com efeito tecnológico - apenas quando loading */}
+      <div className="relative w-80 h-80 mb-8 tech-loader-container">
         {/* Círculos concêntricos animados com gradiente */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className={`tech-ring ring-1 ${isIdle ? 'tech-ring-idle' : ''}`}></div>
-          <div className={`tech-ring ring-2 ${isIdle ? 'tech-ring-idle' : ''}`}></div>
-          <div className={`tech-ring ring-3 ${isIdle ? 'tech-ring-idle' : ''}`}></div>
-          <div className={`tech-ring ring-4 ${isIdle ? 'tech-ring-idle' : ''}`}></div>
+          <div className="tech-ring ring-1"></div>
+          <div className="tech-ring ring-2"></div>
+          <div className="tech-ring ring-3"></div>
+          <div className="tech-ring ring-4"></div>
         </div>
         
         {/* Partículas flutuantes */}
-        <div className={`tech-particle particle-1 ${isIdle ? 'tech-particle-idle' : ''}`}></div>
-        <div className={`tech-particle particle-2 ${isIdle ? 'tech-particle-idle' : ''}`}></div>
-        <div className={`tech-particle particle-3 ${isIdle ? 'tech-particle-idle' : ''}`}></div>
-        <div className={`tech-particle particle-4 ${isIdle ? 'tech-particle-idle' : ''}`}></div>
-        <div className={`tech-particle particle-5 ${isIdle ? 'tech-particle-idle' : ''}`}></div>
-        <div className={`tech-particle particle-6 ${isIdle ? 'tech-particle-idle' : ''}`}></div>
+        <div className="tech-particle particle-1"></div>
+        <div className="tech-particle particle-2"></div>
+        <div className="tech-particle particle-3"></div>
+        <div className="tech-particle particle-4"></div>
+        <div className="tech-particle particle-5"></div>
+        <div className="tech-particle particle-6"></div>
         
         {/* Ícone central com múltiplos efeitos */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className={`tech-icon-glow ${isIdle ? 'tech-icon-glow-idle' : ''}`}></div>
+          <div className="tech-icon-glow"></div>
           <div className="tech-icon-pulse">
             <div className="tech-icon-inner">
-              <StrategyIcon className={`w-20 h-20 ${isIdle ? 'text-gray-500' : 'text-[var(--accent-primary)]'}`} />
+              <StrategyIcon className="w-20 h-20 text-[var(--accent-primary)] strategy-icon-loading" />
             </div>
           </div>
         </div>
         
         {/* Pontos orbitando com trail */}
-        <div className={`tech-orbiting-dot dot-1 ${isIdle ? 'tech-dot-idle' : ''}`}>
-          {!isIdle && <div className="tech-dot-trail"></div>}
+        <div className="tech-orbiting-dot dot-1">
+          <div className="tech-dot-trail"></div>
         </div>
-        <div className={`tech-orbiting-dot dot-2 ${isIdle ? 'tech-dot-idle' : ''}`}>
-          {!isIdle && <div className="tech-dot-trail"></div>}
+        <div className="tech-orbiting-dot dot-2">
+          <div className="tech-dot-trail"></div>
         </div>
-        <div className={`tech-orbiting-dot dot-3 ${isIdle ? 'tech-dot-idle' : ''}`}>
-          {!isIdle && <div className="tech-dot-trail"></div>}
+        <div className="tech-orbiting-dot dot-3">
+          <div className="tech-dot-trail"></div>
         </div>
-        <div className={`tech-orbiting-dot dot-4 ${isIdle ? 'tech-dot-idle' : ''}`}>
-          {!isIdle && <div className="tech-dot-trail"></div>}
+        <div className="tech-orbiting-dot dot-4">
+          <div className="tech-dot-trail"></div>
         </div>
         
-        {/* Barra de progresso circular - apenas quando loading */}
-        {!isIdle && <div className="tech-progress-ring"></div>}
+        {/* Barra de progresso circular */}
+        <div className="tech-progress-ring"></div>
       </div>
 
-      {/* Texto animado com efeito de digitação ou texto idle */}
+      {/* Texto animado com efeito de digitação */}
       <div className="text-center">
-        {variant === 'loading' ? (
-          <>
-            <div className="tech-text-line mb-3">
-              <span className="tech-typing">Gerando estratégia de conteúdo</span>
-              <span className="tech-cursor">|</span>
-            </div>
-            <div className="tech-progress-text">
-              <p className="text-sm text-gray-500 mt-4 tech-processing">
-                Processando com inteligência artificial...
-              </p>
-              <div className="flex gap-1 justify-center mt-3 tech-dots">
-                <span className="tech-dot"></span>
-                <span className="tech-dot"></span>
-                <span className="tech-dot"></span>
-              </div>
-            </div>
-          </>
-        ) : (
-          <>
-            <p className="mt-6 font-semibold text-[var(--text-secondary)] text-lg tech-idle-text">
-              Sua estratégia aparecerá aqui.
-            </p>
-            <p className="text-sm text-gray-500 mt-2 tech-idle-subtext">
-              Envie uma imagem ou escolha um tema para começar.
-            </p>
-          </>
-        )}
+        <div className="tech-text-line mb-3">
+          <span className="tech-typing">Gerando estratégia de conteúdo</span>
+          <span className="tech-cursor">|</span>
+        </div>
+        <div className="tech-progress-text">
+          <p className="text-sm text-gray-500 mt-4 tech-processing">
+            Processando com inteligência artificial...
+          </p>
+          <div className="flex gap-1 justify-center mt-3 tech-dots">
+            <span className="tech-dot"></span>
+            <span className="tech-dot"></span>
+            <span className="tech-dot"></span>
+          </div>
+        </div>
       </div>
     </div>
   );

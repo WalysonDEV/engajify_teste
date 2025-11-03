@@ -508,6 +508,101 @@
       .tech-loader-idle {
         filter: brightness(0.8);
       }
+
+      /* Círculos estáticos para modo idle (sem animação, sem cores) */
+      .tech-ring-static {
+        position: absolute;
+        border: 1px solid rgba(160, 160, 160, 0.2);
+        border-radius: 50%;
+      }
+
+      .tech-ring-static.ring-1 {
+        width: 120px;
+        height: 120px;
+      }
+
+      .tech-ring-static.ring-2 {
+        width: 180px;
+        height: 180px;
+      }
+
+      .tech-ring-static.ring-3 {
+        width: 240px;
+        height: 240px;
+      }
+
+      .tech-ring-static.ring-4 {
+        width: 300px;
+        height: 300px;
+        border-style: dashed;
+        opacity: 0.3;
+      }
+
+      .tech-icon-static {
+        position: relative;
+        z-index: 10;
+      }
+
+      /* Animações para StrategyIcon */
+      .strategy-icon-idle {
+        animation: strategy-icon-idle-float 4s ease-in-out infinite;
+      }
+
+      @keyframes strategy-icon-idle-float {
+        0%, 100% {
+          transform: translateY(0) rotate(0deg) scale(1);
+          opacity: 0.6;
+        }
+        50% {
+          transform: translateY(-8px) rotate(5deg) scale(1.05);
+          opacity: 0.8;
+        }
+      }
+
+      .strategy-icon-loading {
+        animation: strategy-icon-loading-energy 2s ease-in-out infinite;
+      }
+
+      @keyframes strategy-icon-loading-energy {
+        0%, 100% {
+          transform: scale(1) rotate(0deg);
+          filter: drop-shadow(0 0 8px rgba(var(--accent-primary-rgb), 0.6));
+        }
+        25% {
+          transform: scale(1.1) rotate(-5deg);
+          filter: drop-shadow(0 0 12px rgba(var(--accent-primary-rgb), 0.9));
+        }
+        50% {
+          transform: scale(1.15) rotate(0deg);
+          filter: drop-shadow(0 0 16px rgba(var(--accent-primary-rgb), 1));
+        }
+        75% {
+          transform: scale(1.1) rotate(5deg);
+          filter: drop-shadow(0 0 12px rgba(var(--accent-primary-rgb), 0.9));
+        }
+      }
+
+      /* Animação adicional nos paths do StrategyIcon durante loading */
+      .strategy-icon-loading path {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+        animation: strategy-path-draw 3s ease-in-out infinite;
+      }
+
+      @keyframes strategy-path-draw {
+        0% {
+          stroke-dashoffset: 100;
+          opacity: 0.5;
+        }
+        50% {
+          stroke-dashoffset: 0;
+          opacity: 1;
+        }
+        100% {
+          stroke-dashoffset: -100;
+          opacity: 0.5;
+        }
+      }
       .animate-fade-in-out-text { animation: fade-in-out-text 2.5s infinite ease-in-out; }
       
       .icon-button {
